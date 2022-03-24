@@ -1,0 +1,58 @@
+name: BTP Setup Automator - Integration test
+
+on:
+  workflow_dispatch:
+
+permissions:
+    contents: write
+    packages: read
+
+jobs:
+    create-log-folder:
+        runs-on: ubuntu-latest
+        steps:
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+            - name: 'Create log folder'
+              id: create-log-folder
+              run: |
+                mkdir -p testresults 
+    integration-test:
+        needs: [create-log-folder]
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            testcase: [unittest03]
+          fail-fast: false
+          max-parallel: 2
+        container:
+          image: ghcr.io/sap-samples/btp-setup-automator:latest
+          env:
+              TESTCASE: ${{ matrix.testcase }}
+              BTP_EMAIL: ${{secrets.btpemail}}
+              BTP_PASSWORD: ${{secrets.btppassword}}
+              GLOBALACCOUNT: ${{secrets.btpglobalaccount}}
+          volumes:
+            - testresults:/home/user/testresults    
+        steps:
+            - name: 'Create log folder'
+              run: |
+                mkdir -p /home/user/testresults/$TESTCASE/$(date +%Y-%m-%d)/log &&
+                LOGFILE=/home/user/testresults/$TESTCASE/$(date +%Y-%m-%d)/log
+            - name: 'Create metadata folder'
+              run: |
+                mkdir -p /home/user/testresults/$TESTCASE/$(date +%Y-%m-%d)/metadata &&
+                METADATAFILE=/home/user/testresults/$TESTCASE/$(date +%Y-%m-%d)/metadata
+            - name: 'Run integration test'
+              run: |
+                PARAMETERFILE=./usecases/other/unittests/parameterfiles/$TESTCASE.json &&
+                ./btpsa -parameterfile $PARAMETERFILE  -logfile $LOGFILE -metadatafile $METADATAFILE -loginmethod basicAuthentication -email $BTP_EMAIL -password $BTP_PASSWORD -globalaccount $GLOBALACCOUNT
+            - name: 'Run integration test'
+              run: |
+                PARAMETERFILE=./usecases/other/unittests/parameterfiles/$TESTCASE.json &&
+                ./btpsa -parameterfile $PARAMETERFILE  -logfile $LOGFILE -metadatafile $METADATAFILE -loginmethod basicAuthentication -email $BTP_EMAIL -password $BTP_PASSWORD -globalaccount $GLOBALACCOUNT
+            - name: 'Output in case of error'
+              if: ${{ failure() }}
+              run: |
+                printf '%b\n' "$(cat $LOGFILE)" &&
+                printf '%b\n' "$(cat $METADATAFILE)"
