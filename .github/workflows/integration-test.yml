@@ -22,7 +22,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
           matrix:
-            testcase: [unittest03]
+            testcase: [unittest10]
           fail-fast: false
           max-parallel: 2
         container:
