@@ -212,7 +212,7 @@
     },
     {
       "category": "APPLICATION",
-      "name": "SAPLaunchpad",
+      "name": "build-workzone-standard",
       "plan": "standard",
       "requiredrolecollections": [
         {
