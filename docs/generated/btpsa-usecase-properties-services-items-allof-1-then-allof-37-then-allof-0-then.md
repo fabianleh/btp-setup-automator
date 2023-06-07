@@ -10,7 +10,7 @@ unknown
 
 ## plan
 
-service plan >blocks\_of\_100< for >document-classification< is available in data centers:
+service plan >free< for >dq-services< is available in data centers:
 
 *   {'region': 'eu10', 'name': 'Europe (Frankfurt)'}
 

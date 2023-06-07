@@ -39,15 +39,15 @@ unknown
 
 **enum**: the value of this property must be equal to one of the following values:
 
-| Value        | Explanation |
-| :----------- | :---------- |
-| `"beta"`     |             |
-| `"free"`     |             |
-| `"standard"` |             |
+| Value          | Explanation |
+| :------------- | :---------- |
+| `"concurrent"` |             |
+| `"default"`    |             |
+| `"free"`       |             |
 
 ## name
 
-Intelligent Situation Automation: Intelligent Situation Automation is an extension of Situation Handling. It processes situations raised and resolves them automatically using business rules, thus reducing the time users spend on routine manual and repetitive tasks.
+SAP Intelligent Robotic Process Automation: SAP Intelligent Robotic Process Automation lets you automate enterprise business processes. Design process automations with the Desktop Studio by creating end-to-end scenarios. Import these scenarios into the cloud Factory to configure and execute them with Agents. An Agent can work as a Digital Assistant (attended automation) or as a Digital Worker (unattended automation).
 
 `name`
 

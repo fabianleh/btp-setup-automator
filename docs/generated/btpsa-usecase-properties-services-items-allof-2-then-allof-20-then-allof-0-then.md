@@ -10,7 +10,7 @@ unknown
 
 ## plan
 
-application plan >standard< for >enterprise-messaging-hub< is available in data centers:
+application plan >dashboard< for >feature-flags-dashboard< is available in data centers:
 
 *   {'region': 'ap10', 'name': 'Australia (Sydney)'}
 *   {'region': 'ap11', 'name': 'Singapore'}

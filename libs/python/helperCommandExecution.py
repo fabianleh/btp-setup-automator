@@ -14,7 +14,6 @@ def runShellCommand(btpUsecase, command, format, info):
 
 
 def login_cf(btpUsecase):
-
     cfDefined = checkIfCfEnvironmentIsDefined(btpUsecase)
     if cfDefined is True:
         accountMetadata = btpUsecase.accountMetadata
@@ -27,37 +26,59 @@ def login_cf(btpUsecase):
 
         cfApiEndpoint = accountMetadata["cfapiendpoint"]
 
-        command = None
-        pipe = False
-        if btpUsecase.loginmethod == "sso":
-            command = "cf login -a '" + cfApiEndpoint + "' -o '" + org + "' --sso"
-            pipe = True
-        else:
-            password = escapePassword(password)
-
-            command = (
-                "cf login -a '"
-                + cfApiEndpoint
-                + "' -o '"
-                + org
-                + "' -u '"
-                + myemail
-                + "' -p '"
-                + password
-                + "'"
-            )
-        runShellCommandFlex(
-            btpUsecase,
-            command,
-            "INFO",
+        message = (
             "Logging-in to your CF environment in the org >"
             + org
             + "< for your user >"
             + myemail
             + "<",
-            True,
-            pipe,
         )
+
+        command = None
+        pipe = False
+        if btpUsecase.loginmethod == "sso":
+            # Interactive login with SSO
+            # Limitation: If more than one CF space exists, the execution will fail due to interactive data entry
+            # error message is: "inappropriate ioctl for device"
+            # This is an issue with the CF API and not with the script
+            command = "cf login -a '" + cfApiEndpoint + "' -o '" + org + "' --sso"
+            pipe = True
+
+            runShellCommandFlex(
+                btpUsecase,
+                command,
+                "INFO",
+                message,
+                True,
+                pipe,
+            )
+
+        else:
+            password = escapePassword(password)
+            # NON-Interactive login with user and password
+            # To avoid failure due to interaction in case of multiple spaces, we use the manual authentication flow
+            # Step 1 - set api endpoint
+            command = "cf api " + cfApiEndpoint
+            message = (
+                "Non-interactive login step 1: set CF API endpoint to >"
+                + cfApiEndpoint
+                + "<"
+            )
+            runShellCommandFlex(btpUsecase, command, "INFO", message, True, pipe)
+
+            # Step 2 - login
+            command = "cf auth " + myemail + " '" + password + "'"
+            message = (
+                "Non-interactive login step 2: authenticate to CF with user >"
+                + myemail
+                + "<"
+            )
+            runShellCommandFlex(btpUsecase, command, "INFO", message, True, pipe)
+
+            # Step 3 - set org
+            command = "cf target -o " + org
+            message = "Non-interactive login step 3: set CF org to >" + org + "<"
+            runShellCommandFlex(btpUsecase, command, "INFO", message, True, pipe)
 
 
 def login_btp(btpUsecase):
@@ -83,7 +104,6 @@ def login_btp(btpUsecase):
         runShellCommandFlex(btpUsecase, command, "INFO", message, True, True)
         fetchEmailAddressFromBtpConfigFile(btpUsecase)
     else:
-
         password = escapePassword(password)
 
         message = (
@@ -125,6 +145,8 @@ def runShellCommandFlex(btpUsecase, command, format, info, exitIfError, noPipe):
             log.info(info)
         if format == "CHECK":
             log.check(info)
+        if format == "WARN":
+            log.warning(info)
 
     # Check whether we are calling a btp or cf command
     # If yes, we should initiate first a re-login, if necessary
@@ -143,6 +165,9 @@ def runShellCommandFlex(btpUsecase, command, format, info, exitIfError, noPipe):
                 log.command(commandToBeLogged)
                 foundPassword = True
                 break
+        if "cf auth" in command:
+            log.command("cf auth xxxxxxxxxxxxxxxxx")
+            foundPassword = True
         if foundPassword is False:
             log.command(command)
     p = None
@@ -235,6 +260,15 @@ def checkIfCfEnvironmentIsDefined(btpUsecase):
     return False
 
 
+def runCommandFlexAndGetJsonResult(
+    btpUsecase, command, format, message, exitIfError: bool = True
+):
+    p = runShellCommandFlex(btpUsecase, command, format, message, exitIfError, False)
+    list = p.stdout.decode()
+    list = convertStringToJson(list)
+    return list
+
+
 def runCommandAndGetJsonResult(btpUsecase, command, format, message):
     p = runShellCommand(btpUsecase, command, format, message)
     list = p.stdout.decode()
@@ -275,7 +309,6 @@ def executeCommandsFromUsecaseFile(btpUsecase, message, jsonSection):
 
 
 def escapePassword(password) -> str:
-
     if '"' in password or "'" in password:
         log.info("escaping special characters in password")
         password = password.replace('"', '"')

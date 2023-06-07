@@ -1,51 +1,54 @@
-from libs.python.helperCommandExecution import runShellCommand
+import logging
+import os
+import sys
+import time
+
+from libs.python.helperCommandExecution import (
+    runCommandAndGetJsonResult,
+    runShellCommand,
+)
+from libs.python.helperEnvBTP import (
+    create_btp_service,
+    createBtpServiceBinding,
+    deleteBtpServiceBindingAndWait,
+    deleteBtpServiceInstance,
+    get_btp_service_status,
+    getBtpServiceDeletionStatus,
+    getStatusResponseFromCreatedBTPInstance,
+)
+from libs.python.helperEnvCF import (
+    create_cf_cup_service,
+    create_cf_service,
+    deleteCFServiceInstance,
+    deleteCFServiceKeysAndWait,
+    get_cf_service_deletion_status,
+    get_cf_service_key,
+    get_cf_service_status,
+    getStatusResponseFromCreatedInstance,
+)
+from libs.python.helperEnvKyma import (
+    create_kyma_service,
+    createKymaServiceBinding,
+    deleteKymaServiceBindingAndWait,
+    deleteKymaServiceInstance,
+    get_kyma_service_status,
+    getKymaServiceDeletionStatus,
+    getStatusResponseFromCreatedKymaInstance,
+)
 from libs.python.helperGeneric import (
-    getServiceByServiceName,
     createInstanceName,
+    getServiceByServiceName,
     getTimingsForStatusRequest,
 )
 from libs.python.helperJson import (
     convertCloudFoundryCommandOutputToJson,
     convertStringToJson,
 )
-from libs.python.helperEnvCF import (
-    deleteCFServiceInstance,
-    deleteCFServiceKeysAndWait,
-    get_cf_service_deletion_status,
-    get_cf_service_key,
-    get_cf_service_status,
-    create_cf_service,
-    create_cf_cup_service,
-    getStatusResponseFromCreatedInstance,
-)
-from libs.python.helperEnvBTP import (
-    get_btp_service_status,
-    create_btp_service,
-    getStatusResponseFromCreatedBTPInstance,
-    createBtpServiceBinding,
-    deleteBtpServiceBindingAndWait,
-    deleteBtpServiceInstance,
-    getBtpServiceDeletionStatus,
-)
-from libs.python.helperEnvKyma import (
-    createKymaServiceBinding,
-    deleteKymaServiceBindingAndWait,
-    deleteKymaServiceInstance,
-    get_kyma_service_status,
-    create_kyma_service,
-    getKymaServiceDeletionStatus,
-    getStatusResponseFromCreatedKymaInstance,
-)
-import time
-import os
-import sys
-import logging
 
 log = logging.getLogger(__name__)
 
 
 def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
-
     cloudfoundryServices = []
     kubernetesServices = []
     otherServices = []
@@ -65,7 +68,6 @@ def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
                 otherServices.append(service)
 
     if cloudfoundryServices:
-
         command = "cf services"
         message = "Checking creation status of service instances in Cloud Foundry"
 
@@ -111,7 +113,6 @@ def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
                         )
 
     if kubernetesServices:
-
         command = (
             "kubectl get ServiceInstance -n "
             + btpUsecase.k8snamespace
@@ -172,7 +173,6 @@ def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
         jsonResultsBTP = convertStringToJson(p.stdout.decode())
 
         for thisJson in jsonResultsBTP:
-
             if thisJson.get("context").get("origin") == "sapcp":
                 serviceId = thisJson.get("id")
                 instancename = thisJson.get("context").get("instance_name")
@@ -195,8 +195,7 @@ def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
 
                 for service in btpUsecase.definedServices:
                     if (
-                        service.id == serviceId
-                        and service.plan == servicePlanName
+                        service.plan == servicePlanName
                         and service.instancename == instancename
                         and service.successInfoShown is False
                     ):
@@ -212,6 +211,7 @@ def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
                                 + service.plan
                                 + ") is now available"
                             )
+                            service.id = serviceId
                             service.successInfoShown = True
                             service.status = "create succeeded"
                             service.statusResponse = (
@@ -227,6 +227,20 @@ def checkIfAllServiceInstancesCreated(btpUsecase, checkIntervalInSeconds):
         )
 
     return allServicesCreated
+
+
+def isProvisioningRequired(service, allEntitlements):
+    for entitlement in allEntitlements.get("quotas"):
+        if (
+            entitlement.get("service") == service.name
+            and entitlement.get("plan") == service.plan
+        ):
+            if entitlement.get("provisioningMethod") == "NONE_REQUIRED":
+                return False
+            if entitlement.get("provisioningMethod") == "SERVICE_BROKER":
+                return True
+
+    return None
 
 
 def initiateCreationOfServiceInstances(btpUsecase):
@@ -259,12 +273,45 @@ def initiateCreationOfServiceInstances(btpUsecase):
                 )
                 sys.exit(os.EX_DATAERR)
 
+        entitlements = getListOfAvailableServicesAndAppsInSubaccount(btpUsecase)
+
         serviceInstancesToBeCreated = []
         # Restrict the creation of service instances to those
         # that have been set to entitleOnly to False (default)
         for service in btpUsecase.definedServices:
+            # Check whether the creation of a service instance is required at all
+            provisioningRequired = isProvisioningRequired(
+                service, allEntitlements=entitlements
+            )
             if service.entitleonly is False:
-                serviceInstancesToBeCreated.append(service)
+                if (
+                    isProvisioningRequired(service, allEntitlements=entitlements)
+                    is True
+                ):
+                    serviceInstancesToBeCreated.append(service)
+                if (
+                    isProvisioningRequired(service, allEntitlements=entitlements)
+                    is False
+                ):
+                    log.warning(
+                        "Creation of service instance not required for service >"
+                        + service.name
+                        + "< and plan >"
+                        + service.plan
+                        + "<. Skipping."
+                    )
+                if (
+                    isProvisioningRequired(service, allEntitlements=entitlements)
+                    is None
+                ):
+                    log.error(
+                        "Something wrong with entitlement for service >"
+                        + service.name
+                        + "< and plan >"
+                        + service.plan
+                        + "<. Please cross-check!"
+                    )
+                    sys.exit(os.EX_DATAERR)
 
         # Now create all the service instances
         for service in serviceInstancesToBeCreated:
@@ -359,6 +406,25 @@ def get_service_status(btpUsecase, service, targetEnvironment):
         sys.exit(os.EX_DATAERR)
 
     return status
+
+
+def getListOfAvailableServicesAndAppsInSubaccount(btpUsecase):
+    accountMetadata = btpUsecase.accountMetadata
+    subaccountid = accountMetadata["subaccountid"]
+
+    command = (
+        "btp --format json list accounts/entitlement --subaccount '"
+        + subaccountid
+        + "'"
+    )
+    message = (
+        "Get list of available services and app subsciptions for defined subaccount >"
+        + subaccountid
+        + "<"
+    )
+    result = runCommandAndGetJsonResult(btpUsecase, command, "INFO", message)
+
+    return result
 
 
 def createServiceInstance(btpUsecase, service, targetEnvironment, serviceCategory):
@@ -461,7 +527,7 @@ def createServiceKey(serviceKey, service, btpUsecase):
         )
     elif targetenvironment == "sapbtp":
         statusResponse = createBtpServiceBinding(
-            btpUsecase, service.id, service.instancename, serviceKey, labels
+            btpUsecase, service.instancename, serviceKey, labels
         )
     else:
         log.error("The targetenvironment is not supported ")

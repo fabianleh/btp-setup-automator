@@ -10,7 +10,7 @@ unknown
 
 ## plan
 
-application plan >standard< for >LandscapePortal< is available in data centers:
+application plan >free< for >mdgce< is available in data centers:
 
 *   {'region': 'eu10', 'name': 'Europe (Frankfurt)'}
 

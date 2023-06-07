@@ -254,8 +254,6 @@ all of
 
 *   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-124.md "check type definition")
 
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-125.md "check type definition")
-
 # then Properties
 
 | Property      | Type          | Required | Nullable       | Defined by                                                                                                                                                                                |
@@ -305,8 +303,6 @@ unknown
 | `"build-workzone-standard"`                |             |
 | `"business-entity-recognition"`            |             |
 | `"business-rules"`                         |             |
-| `"c4-distributed-order-management"`        |             |
-| `"category-management-api"`                |             |
 | `"cias"`                                   |             |
 | `"cicd-service"`                           |             |
 | `"cis"`                                    |             |
@@ -332,11 +328,13 @@ unknown
 | `"hana-cloud"`                             |             |
 | `"hana-db"`                                |             |
 | `"hana-tenant-db"`                         |             |
+| `"hl7-fhir-service"`                       |             |
 | `"html5-apps-repo"`                        |             |
 | `"hyperledger-fabric"`                     |             |
 | `"ibanservice"`                            |             |
 | `"identity"`                               |             |
 | `"INFRA"`                                  |             |
+| `"integration-assessment"`                 |             |
 | `"integrationsuite"`                       |             |
 | `"intercompany-reconciliation"`            |             |
 | `"invoice-object-recommendation"`          |             |
@@ -376,7 +374,6 @@ unknown
 | `"postgresql"`                             |             |
 | `"postgresql-db"`                          |             |
 | `"print"`                                  |             |
-| `"prism-api-service"`                      |             |
 | `"privatelink"`                            |             |
 | `"process-automation"`                     |             |
 | `"process-automation-service"`             |             |

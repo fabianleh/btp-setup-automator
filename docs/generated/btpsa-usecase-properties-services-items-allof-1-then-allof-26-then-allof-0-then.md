@@ -10,7 +10,7 @@ unknown
 
 ## plan
 
-service plan >connectivity\_proxy< for >connectivity-central< is available in data centers:
+service plan >standard< for >conversational-ai< is available in data centers:
 
 *   {'region': 'eu10', 'name': 'Europe (Frankfurt)'}
 

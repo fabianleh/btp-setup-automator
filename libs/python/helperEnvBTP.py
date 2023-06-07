@@ -1,22 +1,24 @@
-from libs.python.helperGeneric import getTimingsForStatusRequest
-from libs.python.helperCommandExecution import runShellCommand, runShellCommandFlex
-from libs.python.helperJson import convertStringToJson, dictToString
 import logging
 import os
 import sys
 import time
+
+from libs.python.helperCommandExecution import runShellCommand, runShellCommandFlex
+from libs.python.helperEnvironments import (
+    check_if_service_plan_supported_in_environment,
+)
+from libs.python.helperGeneric import getTimingsForStatusRequest
+from libs.python.helperJson import convertStringToJson, dictToString
 
 log = logging.getLogger(__name__)
 
 
 def get_btp_service_status(btpUsecase, service):
     instanceName = service.instancename
-    instanceId = service.id
 
     message = "Get creation status for service instance >" + instanceName + "<"
     command = (
-        "btp --format json get services/instance --id "
-        + instanceId
+        "btp --format json get services/instance "
         + " --name "
         + instanceName
         + +" --subaccount "
@@ -29,7 +31,32 @@ def get_btp_service_status(btpUsecase, service):
     return result
 
 
+def check_if_service_plan_supported_in_sapbtp(btpUsecase, service):
+    result = check_if_service_plan_supported_in_environment(
+        btpUsecase, service, "sapbtp"
+    )
+    return result
+
+
 def create_btp_service(btpUsecase, service):
+    if is_service_instance_already_existing(btpUsecase, service) is True:
+        log.info(
+            "The service >"
+            + service.instancename
+            + "< already exists and won't be created newly."
+        )
+        return
+
+    if check_if_service_plan_supported_in_sapbtp(btpUsecase, service) is False:
+        log.error(
+            "Plan not supported in environment >sapbtp<: service >"
+            + service.name
+            + "< and plan >"
+            + service.plan
+            + "<."
+        )
+        sys.exit(os.EX_DATAERR)
+
     command = (
         "btp --format json create services/instance --subaccount "
         + btpUsecase.accountMetadata.get("subaccountid")
@@ -43,6 +70,8 @@ def create_btp_service(btpUsecase, service):
 
     if service.parameters is not None:
         command = command + " --parameters '" + dictToString(service.parameters) + "'"
+    elif service.serviceparameterfile is not None:
+        command += f" --parameters {service.serviceparameterfile}"
 
     if service.labels is not None:
         command = command + " --labels '" + dictToString(service.labels) + "'"
@@ -58,19 +87,15 @@ def create_btp_service(btpUsecase, service):
         + " via BTP CLI"
     )
 
-    p = runShellCommand(btpUsecase, command, "INFO", message)
-
-    result = convertStringToJson(p.stdout.decode())
-
-    service.id = result.get("id")
+    runShellCommand(btpUsecase, command, "INFO", message)
 
     return service
 
 
 def getStatusResponseFromCreatedBTPInstance(btpUsecase, instancename, service):
     command = (
-        "btp --format json get services/instance --id "
-        + service.id
+        "btp --format json get services/instance --name "
+        + instancename
         + " --subaccount "
         + btpUsecase.accountMetadata.get("subaccountid")
     )
@@ -81,14 +106,22 @@ def getStatusResponseFromCreatedBTPInstance(btpUsecase, instancename, service):
     return jsonResult
 
 
-def createBtpServiceBinding(btpUsecase, instanceId, instanceName, keyName, keyLabels):
+def createBtpServiceBinding(btpUsecase, instanceName, keyName, keyLabels):
     result = None
+
+    if is_service_key_already_existing(btpUsecase, keyName) is True:
+        log.info(
+            "The service key>"
+            + keyName
+            + "< already exists and won't be created newly."
+        )
+        return
 
     command = (
         "btp --format JSON create services/binding --name "
         + keyName
-        + " --service-instance "
-        + instanceId
+        + " --instance-name "
+        + instanceName
         + " --subaccount "
         + btpUsecase.accountMetadata.get("subaccountid")
     )
@@ -186,7 +219,8 @@ def deleteBtpServiceBinding(keyName, instanceName, btpUsecase):
 def deleteBtpServiceInstance(service, btpUsecase):
     command = (
         "btp --format JSON delete services/instance "
-        + service["id"]
+        + "--name "
+        + service["instancename"]
         + " -sa "
         + btpUsecase.accountMetadata.get("subaccountid")
         + " --confirm"
@@ -202,7 +236,8 @@ def deleteBtpServiceInstance(service, btpUsecase):
 def getBtpServiceDeletionStatus(service, btpUsecase):
     command = (
         "btp --format JSON get services/instance "
-        + service["id"]
+        + "--name "
+        + service["instancename"]
         + " -sa "
         + btpUsecase.accountMetadata.get("subaccountid")
     )
@@ -218,3 +253,43 @@ def getBtpServiceDeletionStatus(service, btpUsecase):
         return "deleted"
     else:
         return "not deleted"
+
+
+def is_service_instance_already_existing(btpUsecase, service):
+    instanceName = service.instancename
+
+    message = "Check if service instance >" + instanceName + "< already exists"
+    command = (
+        "btp --format json get services/instance "
+        + " --name "
+        + instanceName
+        + " --subaccount "
+        + btpUsecase.accountMetadata.get("subaccountid")
+    )
+
+    p = runShellCommandFlex(btpUsecase, command, "CHECK", message, False, False)
+    err = p.stderr.decode()
+
+    if err != "" and "FAILED" in err:
+        return False
+    else:
+        return True
+
+
+def is_service_key_already_existing(btpUsecase, keyName):
+    message = "Check if service key >" + keyName + "< already exists"
+    command = (
+        "btp --format json get services/binding "
+        + " --name "
+        + keyName
+        + " --subaccount "
+        + btpUsecase.accountMetadata.get("subaccountid")
+    )
+
+    p = runShellCommandFlex(btpUsecase, command, "CHECK", message, False, False)
+    err = p.stderr.decode()
+
+    if err != "" and "FAILED" in err:
+        return False
+    else:
+        return True

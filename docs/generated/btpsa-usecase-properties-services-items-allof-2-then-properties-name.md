@@ -17,8 +17,6 @@ unknown
 | `"auditlog-viewer"`                             |             |
 | `"automationpilot"`                             |             |
 | `"Backend-service"`                             |             |
-| `"c4-distributed-order-management-app"`         |             |
-| `"categorymanagement-o2-s2"`                    |             |
 | `"cias"`                                        |             |
 | `"cicd-app"`                                    |             |
 | `"content-agent-ui"`                            |             |
@@ -40,6 +38,7 @@ unknown
 | `"it-prod"`                                     |             |
 | `"LandscapePortal"`                             |             |
 | `"market-rates-ux"`                             |             |
+| `"mdgce"`                                       |             |
 | `"MDMBusinessPartnerApplication"`               |             |
 | `"mdo-one-mds-master"`                          |             |
 | `"MDOrchestrationApplication"`                  |             |
@@ -47,7 +46,6 @@ unknown
 | `"PersonalDataManagerApp"`                      |             |
 | `"PortalApplication"`                           |             |
 | `"print-app"`                                   |             |
-| `"prism-api"`                                   |             |
 | `"process-automation"`                          |             |
 | `"procurement"`                                 |             |
 | `"responsibility-management-application-beta"`  |             |

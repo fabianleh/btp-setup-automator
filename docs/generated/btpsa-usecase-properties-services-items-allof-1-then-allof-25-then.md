@@ -37,14 +37,14 @@ unknown
 
 **enum**: the value of this property must be equal to one of the following values:
 
-| Value                  | Explanation |
-| :--------------------- | :---------- |
-| `"connectivity_proxy"` |             |
-| `"lite"`               |             |
+| Value           | Explanation |
+| :-------------- | :---------- |
+| `"application"` |             |
+| `"standard"`    |             |
 
 ## name
 
-SAP Connectivity service: SAP BTP Connectivity service allows you to establish secure and reliable connectivity between your cloud applications and on-premise systems running in isolated networks.
+SAP Content Agent service: SAP Content Agent service is a tool for SAP BTP applications offering generic content management operations such as view, export and import content with inter-dependencies and integration with SAP Cloud Transport Management service. It offers a view to track all activities along with logs, status and other information.
 
 `name`
 

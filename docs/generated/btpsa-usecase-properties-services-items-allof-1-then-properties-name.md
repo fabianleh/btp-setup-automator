@@ -27,8 +27,6 @@ unknown
 | `"build-workzone-standard"`                |             |
 | `"business-entity-recognition"`            |             |
 | `"business-rules"`                         |             |
-| `"c4-distributed-order-management"`        |             |
-| `"category-management-api"`                |             |
 | `"cias"`                                   |             |
 | `"cicd-service"`                           |             |
 | `"cis"`                                    |             |
@@ -54,11 +52,13 @@ unknown
 | `"hana-cloud"`                             |             |
 | `"hana-db"`                                |             |
 | `"hana-tenant-db"`                         |             |
+| `"hl7-fhir-service"`                       |             |
 | `"html5-apps-repo"`                        |             |
 | `"hyperledger-fabric"`                     |             |
 | `"ibanservice"`                            |             |
 | `"identity"`                               |             |
 | `"INFRA"`                                  |             |
+| `"integration-assessment"`                 |             |
 | `"integrationsuite"`                       |             |
 | `"intercompany-reconciliation"`            |             |
 | `"invoice-object-recommendation"`          |             |
@@ -98,7 +98,6 @@ unknown
 | `"postgresql"`                             |             |
 | `"postgresql-db"`                          |             |
 | `"print"`                                  |             |
-| `"prism-api-service"`                      |             |
 | `"privatelink"`                            |             |
 | `"process-automation"`                     |             |
 | `"process-automation-service"`             |             |

@@ -6,32 +6,6 @@ all of
 
 *   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-0.md "check type definition")
 
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-1.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-2.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-3.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-4.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-5.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-6.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-7.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-8.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-9.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-10.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-11.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-12.md "check type definition")
-
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-1-then-allof-44-then-allof-13.md "check type definition")
-
 # then Properties
 
 | Property      | Type          | Required | Nullable       | Defined by                                                                                                                                                                                                            |
@@ -61,26 +35,13 @@ unknown
 
 **enum**: the value of this property must be equal to one of the following values:
 
-| Value            | Explanation |
-| :--------------- | :---------- |
-| `"1024premium"`  |             |
-| `"1024standard"` |             |
-| `"128premium"`   |             |
-| `"128standard"`  |             |
-| `"2048premium"`  |             |
-| `"2048standard"` |             |
-| `"256premium"`   |             |
-| `"256standard"`  |             |
-| `"512premium"`   |             |
-| `"512standard"`  |             |
-| `"64premium"`    |             |
-| `"64standard"`   |             |
-| `"enterprise"`   |             |
-| `"standard"`     |             |
+| Value       | Explanation |
+| :---------- | :---------- |
+| `"default"` |             |
 
 ## name
 
-SAP HANA service for SAP BTP: The SAP HANA service allows you to leverage the in-memory data processing capabilities of SAP HANA in the cloud. As a managed database service, backups are fully automated and service availability guaranteed. Using the SAP HANA service, you can set up and manage SAP HANA databases and bind them to applications running on SAP Business Technology Platform. You can access SAP HANA databases using a variety of languages and interfaces, as well as build applications and models using tools provided with SAP HANA.
+SAP Health Data Services for FHIR: SAP Health Data Services for FHIR supports you in designing, implementing, and operating an application or service relying on health-related data. At its core, it is a cloud-native implementation of the HL7® FHIR® standard.The service allows the profiling and storing of resources according to your business and localization needs. It lets you manage health data using provided REST APIs and messaging endpoints, and offers extensibility with custom resources, FHIR extensions, and business rules.
 
 `name`
 

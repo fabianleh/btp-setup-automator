@@ -37,14 +37,14 @@ unknown
 
 **enum**: the value of this property must be equal to one of the following values:
 
-| Value                    | Explanation |
-| :----------------------- | :---------- |
-| `"enterprise_agreement"` |             |
-| `"free"`                 |             |
+| Value          | Explanation |
+| :------------- | :---------- |
+| `"oneproduct"` |             |
+| `"standard"`   |             |
 
 ## name
 
-SAP Integration Suite: SAP Integration Suite helps you to quickly develop and manage reliable communication between applications, services, and systems across heterogeneous landscapes.
+SAP IoT: SAP IoT business services allow you to put raw sensor data into business object context and then use query models, rules, events and actions to leverage the data near real-time in analytical or transactional business applications.
 
 `name`
 

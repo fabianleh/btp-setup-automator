@@ -10,9 +10,12 @@ unknown
 
 ## plan
 
-application plan >CategoryManagement< for >categorymanagement-o2-s2< is available in data centers:
+application plan >default< for >cicd-app< is available in data centers:
 
 *   {'region': 'eu10', 'name': 'Europe (Frankfurt)'}
+*   {'region': 'jp10', 'name': 'Japan (Tokyo)'}
+*   {'region': 'us10', 'name': 'US East (VA)'}
+*   {'region': 'us20', 'name': 'US West (WA)'}
 
 `plan`
 

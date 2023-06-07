@@ -10,9 +10,12 @@ unknown
 
 ## plan
 
-application plan >free< for >intelligent-situation-automation-app< is available in data centers:
+application plan >default< for >IRPA< is available in data centers:
 
+*   {'region': 'ap10', 'name': 'Australia (Sydney)'}
 *   {'region': 'eu10', 'name': 'Europe (Frankfurt)'}
+*   {'region': 'jp10', 'name': 'Japan (Tokyo)'}
+*   {'region': 'us10', 'name': 'US East (VA)'}
 
 `plan`
 

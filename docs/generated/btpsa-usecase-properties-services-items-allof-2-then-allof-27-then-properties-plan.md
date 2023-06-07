@@ -8,5 +8,4 @@ unknown
 
 | Value          | Explanation |
 | :------------- | :---------- |
-| `"oneproduct"` |             |
-| `"standard"`   |             |
+| `"enterprise"` |             |

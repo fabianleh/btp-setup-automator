@@ -4,7 +4,7 @@
 
 ## Description
 
-This repository provides the user with a script to **automate the setup** of an [SAP Business Technology Platform (SAP BTP) account](https://account.hana.ondemand.com/) and to **learn** how this is done with the various command line interfaces and tools that run inside a [Docker](https://www.docker.com/) container.
+This repository provides the user with a script to **automate the setup** of an [SAP Business Technology Platform (SAP BTP) account](https://account.hana.ondemand.com/) and to **learn** how this is done with the various command line interfaces and tools that run inside a [Docker](https://www.docker.com/) container. It uses  JSON configuration files to automate this setup of SAP BTP accounts or do other administrative tasks.
 
 This includes:
 
@@ -56,4 +56,14 @@ Checkout the [CODE_OF_CONDUCT.md file](CODE_OF_CONDUCT.md) for more details on t
 
 ## License
 
-Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSES/Apache-2.0.txt) file.
+Copyright (c) 2023 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSES/Apache-2.0.txt) file.
+
+## Open in GitHub Codespaces
+
+### Stable image
+
+[![Open Stable in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=460942707&machine=basicLinux32gb&devcontainer_path=.devcontainer%2Fstable%2Fdevcontainer.json&location=WestEurope) 
+
+### Dev image
+
+[![Open Dev in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=dev&repo=460942707&machine=basicLinux32gb&devcontainer_path=.devcontainer%2Fdev%2Fdevcontainer.json&location=WestEurope)

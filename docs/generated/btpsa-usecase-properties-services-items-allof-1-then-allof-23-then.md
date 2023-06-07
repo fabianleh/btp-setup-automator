@@ -37,14 +37,14 @@ unknown
 
 **enum**: the value of this property must be equal to one of the following values:
 
-| Value       | Explanation |
-| :---------- | :---------- |
-| `"central"` |             |
-| `"local"`   |             |
+| Value                  | Explanation |
+| :--------------------- | :---------- |
+| `"connectivity_proxy"` |             |
+| `"lite"`               |             |
 
 ## name
 
-SAP Cloud Management service for SAP BTP: Manage the control plane, account model, and product resources in SAP BTP using supported API interfaces provided by the SAP Cloud Management service for SAP BTP.
+SAP Connectivity service: SAP BTP Connectivity service allows you to establish secure and reliable connectivity between your cloud applications and on-premise systems running in isolated networks.
 
 `name`
 

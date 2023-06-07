@@ -6,8 +6,6 @@ all of
 
 *   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-2-then-allof-27-then-allof-0.md "check type definition")
 
-*   [Untitled undefined type in JSON Schema for BTPSA use case definitions](btpsa-usecase-properties-services-items-allof-2-then-allof-27-then-allof-1.md "check type definition")
-
 # then Properties
 
 | Property      | Type          | Required | Nullable       | Defined by                                                                                                                                                                                                            |
@@ -39,12 +37,11 @@ unknown
 
 | Value          | Explanation |
 | :------------- | :---------- |
-| `"oneproduct"` |             |
-| `"standard"`   |             |
+| `"enterprise"` |             |
 
 ## name
 
-SAP IoT: SAP IoT business services allow you to put raw sensor data into business object context and then use query models, rules, events and actions to leverage the data near real-time in analytical or transactional business applications.
+Process Integration: The SAP Cloud Integration connects cloud applications with other SAP and non-SAP cloud and on-premise apps.
 
 `name`
 

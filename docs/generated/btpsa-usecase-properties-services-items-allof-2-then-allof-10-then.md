@@ -37,14 +37,14 @@ unknown
 
 **enum**: the value of this property must be equal to one of the following values:
 
-| Value                   | Explanation |
-| :---------------------- | :---------- |
-| `"CategoryManagement"`  |             |
-| `"OpportunityAnalysis"` |             |
+| Value       | Explanation |
+| :---------- | :---------- |
+| `"default"` |             |
+| `"free"`    |             |
 
 ## name
 
-SAP Category Management: SAP Category Management provides the fundamental tools and data insights across all the phases of the development, execution, and monitoring of the category strategy with seamless integration to the source-to-pay processes.
+SAP Continuous Integration and Delivery: SAP Continuous Integration and Delivery lets you configure and run predefined continuous integration and delivery (CI/CD) pipelines that automatically build, test and deploy your code changes to speed up your development and delivery cycles.
 
 `name`
 
